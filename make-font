@@ -17,4 +17,4 @@ done
 
 BASE_DIR="$(dirname $( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd ))"
 
-"$DOCKER" run -v ".:/data" -t docker.io/gonicus/gosa-dev-helper:latest $*
+"$DOCKER" run -v ".:/data" -t docker.io/gonicus/svg-to-ttf:latest $*
