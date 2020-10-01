@@ -7,4 +7,4 @@ if [ -z "$DOCKER" ]; then
     exit 1
 fi
 
-"$DOCKER" run -v ".:/data" -t docker.io/gonicus/svg-to-ttf:latest $*
+"$DOCKER" run -v "$PWD/:/data" -t docker.io/gonicus/svg-to-ttf:latest $*
