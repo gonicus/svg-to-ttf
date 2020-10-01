@@ -251,3 +251,5 @@ Start the demo:
 ./demo
 ```
 
+![Sample screenshot](demo.png)
+
