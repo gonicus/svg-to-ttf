@@ -229,6 +229,21 @@ Window {
 
 This creates a centered atom (a pair of icon and text) with a green image and normal styled text.
 
+Resources
+---------
+
+Create the `qml.qrc` file, to tell Qt about it's resources:
+
+```xml
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Icon.qml</file>
+        <file>IconFont.ttf</file>
+    </qresource>
+</RCC>
+```
+
 Build the demo
 --------------
 
