@@ -128,6 +128,8 @@ Project file
 Create a file named `demo.pro` with the following content:
 
 ```qmake
+!versionAtLeast(QT_VERSION, 5.15):error("Use at least Qt version 5.15")
+
 QT += quick gui
 
 CONFIG += c++11 qmltypes
