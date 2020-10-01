@@ -38,9 +38,11 @@ you can install the wrapper script like this:
 ```sh
 curl https://raw.githubusercontent.com/gonicus/svg-to-ttf/master/svg-to-ttf --output svg-to-ttf
 chmod +x svg-to-ttf
+mv svg-to-ttf ~/.local/bin
+hash -r
 ```
 
-Move the svg-to-ttf to a directory in path of your choice (i.e. `~/.local/bin`). Test it for
+Move the svg-to-ttf to a directory in `PATH` of your choice (for me it is `~/.local/bin`). Test it for
 the first time and let *docker* pull some layers first:
 
 ```sh
@@ -87,4 +89,194 @@ around.
 Example with Qt/QML
 ===================
 
+Lets do a simple Qt/QML (≥5.15) application that includes a couple of [Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
+icons. They're available as a TTF already, but they include the source SVGs, so that we've something to play around.
+
+As a first step, lets create a project directory and change into it:
+
+```sh
+mkdir demo
+cd demo
+```
+
+Download a bunch of SVGs for demo purposes:
+
+```sh
+curl -L https://github.com/FortAwesome/Font-Awesome/archive/5.15.0.tar.gz | tar xvz --strip-components=2 Font-Awesome-5.15.0/svgs/regular
+```
+
+Build a font from it that is suitable to be used in a Qt/QML project:
+
+```sh
+svg-to-ttf --qml-namespace Demo --qt regular
+```
+
+Result
+
+```
+✓ ./IconFont.ttf has been generated
+✓ ./IconFont.h has been generated
+✓ ./IconFont.cpp has been generated
+✓ ./Icon.qml has been generated
+```
+
+Ok. We've a TTF font now, a simple IconFontResolver class, which basically stores the *file-to-index* mapping and a
+new QML element called `Icon`. Lets build a *qmake* based project around it:
+
+Project file
+------------
+
+Create a file named `demo.pro` with the following content:
+
+```qmake
+QT += quick gui
+
+CONFIG += c++11 qmltypes
+
+SOURCES += \
+        IconFont.cpp \
+        main.cpp
+
+RESOURCES += qml.qrc
+
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
+
+# Additional import path used to resolve QML modules just for Qt Quick Designer
+QML_DESIGNER_IMPORT_PATH =
+
+QML_IMPORT_NAME = Demo
+QML_IMPORT_MAJOR_VERSION = 1
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    IconFont.h
+```
+
+Please note that `QML_IMPORT_NAME` needs to conform to the `--qml-namespace Demo` option from above.
+
+Application boilerplate
+-----------------------
+
+Create the `main.cpp`:
+
+```cpp
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+
+    return app.exec();
+}
+```
+
+Main view
+---------
+
+Create the main QML demo file referenced from `main.cpp` called `main.qml`:
+
+```qml
+import QtQuick 2.15
+import QtQuick.Window 2.15
+
+Window {
+    width: 640
+    height: 480
+    visible: true
+    title: qsTr('Icon Font Demo')
+
+    GridView {
+        anchors.fill: parent
+        cellWidth: 64
+        cellHeight: 64
+
+        delegate: Icon {
+            id: delegate
+
+            required property string modelData
+
+            iconPath: delegate.modelData
+            size: 64
+        }
+
+        model: [
+            "address-book.svg",
+            "address-card.svg",
+            "angry.svg",
+            "arrow-alt-circle-down.svg",
+            "arrow-alt-circle-left.svg",
+            "arrow-alt-circle-right.svg",
+            "arrow-alt-circle-up.svg",
+            "bell-slash.svg",
+            "bell.svg",
+            "bookmark.svg",
+            "building.svg",
+            "calendar-alt.svg",
+            "calendar-check.svg",
+            "calendar-minus.svg",
+            "calendar-plus.svg",
+            "calendar.svg",
+            "calendar-times.svg",
+            "caret-square-down.svg",
+            "caret-square-left.svg",
+            "caret-square-right.svg",
+            "caret-square-up.svg",
+            "chart-bar.svg",
+            "check-circle.svg",
+            "check-square.svg",
+            "circle.svg",
+            "clipboard.svg",
+            "clock.svg",
+            "clone.svg",
+            "closed-captioning.svg",
+            "comment-alt.svg",
+            "comment-dots.svg",
+            "comments.svg",
+            "comment.svg"
+        ]
+    }
+}
+```
+
+TODO
+
+Build the demo
+--------------
+
+Create a build directory and change into it:
+
+```sh
+mkdir build
+cd build
+```
+
+Run qmake from your Qt installation and start the build:
+
+```sh
+qmake ..
+make
+```
+
+Start the demo:
+
+```sh
+./demo
+```
 
