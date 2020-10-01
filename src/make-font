@@ -74,8 +74,6 @@ class SVGProcessor:
 #include <QObject>
 #include <QtQml>
 
-namespace $FONT_NAME {
-
 class ${NAME}Resolver : public QObject {
     Q_OBJECT
     QML_ELEMENT
@@ -86,8 +84,6 @@ public:
 
     Q_INVOKABLE quint16 indexOfPath(const QString& iconPath);
 };
-
-}
 
 #endif
 """)
@@ -119,8 +115,6 @@ uint16_t index(const std::string& path);
 #include <QHash>
 #include "${NAME}.h"
 
-namespace $NAME {
-
 ${NAME}Resolver::${NAME}Resolver(QObject* parent) : QObject(parent) {
     static bool initialized = false;
 
@@ -136,8 +130,6 @@ $DATA
     };
 
     return lookup_table.value(iconPath, 0);
-}
-
 }
 
 """)
