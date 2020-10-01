@@ -2,19 +2,19 @@ SVG to TTF conversion
 =====================
 ![Docker Pulls](https://img.shields.io/docker/pulls/gonicus/svg-to-ttf) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-In some cases you've the task to integrate lots of icons into your application. All
+In some cases you've got the task to integrate lots of icons into your application. All
 these icons need to be scaleable to play well with high DPI displays, and should be
-colorizable on demand (i.e. when a state changes, or an interaction takes place).
+colorizable on demand (e.g. when a state changes or an interaction shall be visualized).
 
 Putting all these icons in your application using SVGs might be the first option that
-comes to mind, but it turns out, that the rendering perfomance may suffer in some cases
+comes to mind, but it turns out that the rendering perfomance may suffer in some cases
 and that including icons by SVG increases the size of your application dramatically. That's
-the point where fonts can be used:
+the point where (icon) fonts can be used:
 
  * scaleable (no need for multiple bitmap icons in various sizes)
  * rendering quickly as text glyphs
  * colorizable by just setting the text color
- * smaller in size (i.e. ~800 icons, SVGs 3.2M, TTF 0.2M)
+ * smaller in size (e.g. ~800 icons, SVGs 3.2M, TTF 0.2M)
 
 Using fonts may not be applicable in all cases, because there are also drawbacks:
 
@@ -22,16 +22,16 @@ Using fonts may not be applicable in all cases, because there are also drawbacks
  * SVGs may need some extra love (i.e. we'd recommend only using a single *path* in them)
  * font editors are a bit special for people not comfortable with them
 
-So - `svg-to-ttf` is a small utility script that helps in creating icon fonts for use
-in *C++* based applications. It crawls thru a given directory and collects all SVGs, puts
-them in a TTF file and maintains a map where you can lookup the fonts character index when
+`svg-to-ttf` is a small utility script that helps creating icon fonts to be used
+in *C++*-based applications. It crawls through a given directory and collects all SVGs, puts
+them in a TTF file and maintains a map where the font's character index is looked up by
 passing in the original SVG path.
 
 
 Installation
 ============
 
-As it needs fontawesome and it's python bindings, we recommend using a pre-built *docker*
+As it needs fontawesome and its python bindings, we recommend using the pre-built *docker*
 image. All you need is `docker`/`podman` and access to *docker hub*. On a Unix style system,
 you can install the wrapper script like this:
 
@@ -42,7 +42,7 @@ mv svg-to-ttf ~/.local/bin
 hash -r
 ```
 
-Move *svg-to-ttf* to a directory in `PATH` of your choice (for me it is `~/.local/bin`). Test it for
+Move *svg-to-ttf* to a directory in `PATH` of your choice (e.g. `~/.local/bin`). Test it for
 the first time and let *docker* pull some layers first:
 
 ```sh
@@ -76,14 +76,13 @@ optional arguments:
 From source
 -----------
 
-Alternatively you may want to run it from source. Just run the python script in the src directory direcly and make
-sure that you have
+Alternatively you may want to run it from source. Just run the python script in the src directory directly and make
+sure that you have these installed:
 
  * Python 3
  * Beautifulsoup 4
  * Fontforge bindings for Python 3
 
-around.
 
 
 Example with Qt/QML
@@ -92,7 +91,7 @@ Example with Qt/QML
 Lets do a simple Qt/QML (≥5.15) application that includes a couple of [Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
 icons. They're available as a TTF already, but they include the source SVGs, so that we've something to play around.
 
-As a first step, lets create a project directory and change into it:
+As a first step, let's create a project directory and change into it:
 
 ```sh
 mkdir demo
@@ -120,8 +119,8 @@ If everything works fine, it should output:
 ✓ ./Icon.qml has been generated
 ```
 
-Ok. We've a TTF font now, a simple IconFontResolver class, which basically stores the *file-to-index* mapping and a
-new QML element called `Icon`. Lets build a *qmake* based project around it:
+Ok. We've got a TTF font now, a simple IconFontResolver class, which basically stores the *file-to-index* mapping and a
+new QML element called `Icon`. Let's build a *qmake* based project around it:
 
 Project file
 ------------
@@ -190,7 +189,7 @@ int main(int argc, char *argv[])
 Main view
 ---------
 
-Create the main QML demo file referenced from `main.cpp` called `main.qml`:
+Create the main QML demo file referenced from `main.cpp`, called `main.qml`:
 
 ```qml
 import QtQuick 2.15
@@ -226,7 +225,7 @@ Window {
 
 ```
 
-This creates a centered atom with a green image and normal styled text.
+This creates a centered atom (a pair of icon and text) with a green image and normal styled text.
 
 Build the demo
 --------------
