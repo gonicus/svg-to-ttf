@@ -4,5 +4,7 @@ RUN microdnf install -y fontforge python3-beautifulsoup4 && \
     mkdir /data
 COPY src/svg-to-ttf /usr/local/bin
 
+VOLUME ["/data"]
 WORKDIR /data
+
 ENTRYPOINT ["/usr/local/bin/svg-to-ttf"]
