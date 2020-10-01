@@ -7,14 +7,4 @@ if [ -z "$DOCKER" ]; then
     exit 1
 fi
 
-# Save base directory
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$BASE_DIR/$SOURCE"
-done
-
-BASE_DIR="$(dirname $( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd ))"
-
 "$DOCKER" run -v ".:/data" -t docker.io/gonicus/svg-to-ttf:latest $*
