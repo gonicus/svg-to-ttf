@@ -54,7 +54,7 @@ class SVGProcessor:
                     f.write(svg.prettify(formatter=XMLFormatter()))
 
                 objects[index] = spool_name
-                objects_lt[index] = str(path)[len(self._path) + 1:]
+                objects_lt[index] = os.path.splitext(str(path)[len(self._path) + 1:])[0]
                 index += 1
 
         # Do font processing
@@ -164,12 +164,10 @@ $DATA
 import ${COMPONENT} 1.0 as IconFont
 
 /// Loads and displays an icon of the icon font by giving the path to the icon svg file
-Text {
+Item {
     id: control
-    width: control.size
+    width: icon.implicitWidth
     height: control.size
-    verticalAlignment: Text.AlignVCenter
-    horizontalAlignment: Text.AlignHCenter
 
     /// Path to the icon svg file that should be loaded; empty string (default) unloads the icon
     property string iconPath
@@ -187,6 +185,9 @@ Text {
     Text {
         id: icon
         text: String.fromCharCode(resolver.indexOfPath(control.iconPath))
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        anchors.centerIn: parent
         font.family: "${NAME}"
         font.pixelSize: control.size
     }

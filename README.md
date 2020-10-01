@@ -42,7 +42,7 @@ mv svg-to-ttf ~/.local/bin
 hash -r
 ```
 
-Move the svg-to-ttf to a directory in `PATH` of your choice (for me it is `~/.local/bin`). Test it for
+Move *svg-to-ttf* to a directory in `PATH` of your choice (for me it is `~/.local/bin`). Test it for
 the first time and let *docker* pull some layers first:
 
 ```sh
@@ -111,7 +111,7 @@ Build a font from it that is suitable to be used in a Qt/QML project:
 svg-to-ttf --qml-namespace Demo --qt regular
 ```
 
-Result
+If everything works fine, it should output:
 
 ```
 ✓ ./IconFont.ttf has been generated
@@ -202,60 +202,31 @@ Window {
     visible: true
     title: qsTr('Icon Font Demo')
 
-    GridView {
-        anchors.fill: parent
-        cellWidth: 64
-        cellHeight: 64
+    Row {
+        anchors.centerIn: parent
+        height: Math.max(demoIcon.height, demoLabel.height)
+        spacing: 16
 
-        delegate: Icon {
-            id: delegate
-
-            required property string modelData
-
-            iconPath: delegate.modelData
-            size: 64
+        Icon {
+            id: demoIcon
+            iconPath: 'check-circle'
+            size: 32
+            color: 'green'
+            anchors.verticalCenter: parent.verticalCenter
         }
 
-        model: [
-            "address-book.svg",
-            "address-card.svg",
-            "angry.svg",
-            "arrow-alt-circle-down.svg",
-            "arrow-alt-circle-left.svg",
-            "arrow-alt-circle-right.svg",
-            "arrow-alt-circle-up.svg",
-            "bell-slash.svg",
-            "bell.svg",
-            "bookmark.svg",
-            "building.svg",
-            "calendar-alt.svg",
-            "calendar-check.svg",
-            "calendar-minus.svg",
-            "calendar-plus.svg",
-            "calendar.svg",
-            "calendar-times.svg",
-            "caret-square-down.svg",
-            "caret-square-left.svg",
-            "caret-square-right.svg",
-            "caret-square-up.svg",
-            "chart-bar.svg",
-            "check-circle.svg",
-            "check-square.svg",
-            "circle.svg",
-            "clipboard.svg",
-            "clock.svg",
-            "clone.svg",
-            "closed-captioning.svg",
-            "comment-alt.svg",
-            "comment-dots.svg",
-            "comments.svg",
-            "comment.svg"
-        ]
+        Text {
+            id: demoLabel
+            font.pixelSize: 32
+            text: qsTr('This looks awesome!')
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 }
+
 ```
 
-TODO
+This creates a centered atom with a green image and normal styled text.
 
 Build the demo
 --------------
