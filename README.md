@@ -254,6 +254,6 @@ Start the demo:
 
 ![Sample screenshot](demo.png)
 
-As a side not for Qt: if there is a realy huge amount of icons to be displayed at a time, it may be a good idea to
+As a side note for Qt: if there is a realy huge amount of icons to be displayed at a time, it may be a good idea to
 pre-generate the [font distance field](https://www.qt.io/blog/2018/10/10/introducing-distance-field-generator) for
 your application.
